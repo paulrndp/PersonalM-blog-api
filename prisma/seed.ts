@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-// Seed data definitions: at least 5 items per category
+// Seed data definitions: 5 stories with exactly 3 chapters each, 5 blog posts, 5 random thoughts
 const SEED_DATA = {
   admin: {
     username: "admin",
@@ -32,6 +32,12 @@ const SEED_DATA = {
             "<p>By mid-afternoon, the sun barely broke through the thick gray clouds. Ahead lay an old cabin with light spilling from a frosted window. Smoke curled lazily from the stone chimney.</p><p>'Someone is still here,' she whispered to herself, feeling a mix of trepidation and curiosity wash over her.</p>",
           views: 53,
         },
+        {
+          title: "Chapter 3: Voices in the Hearth",
+          content:
+            "<p>The embers glowed softly inside the rustic fireplace. An old diary rested on the mantelpiece, its leather cover cracked with age. Hannah sat on the rocking chair and gently turned the first yellowed page.</p><p>'If you are reading this, you have finally returned home,' the handwritten ink began.</p>",
+          views: 41,
+        },
       ],
     },
     {
@@ -53,6 +59,12 @@ const SEED_DATA = {
             "<p>Elaria drew her twin daggers and took a measured breath. The silence of the mountain pass was unnatural. No birds sang, and even the mountain winds had settled into an eerie calm.</p>",
           views: 95,
         },
+        {
+          title: "Chapter 2: Shadows of the Citadel",
+          content:
+            "<p>The twin moons cast an ethereal violet hue over the ancient ruins. Elaria navigated the crumbling stone corridor, listening intently to the distant hum of the celestial spire.</p><p>A cloaked figure stood at the threshold of the grand archive, waiting with an unsheathed obsidian blade.</p>",
+          views: 68,
+        },
       ],
     },
     {
@@ -67,6 +79,18 @@ const SEED_DATA = {
           content:
             "<p>The holographic advertisements flickered through the sheet of relentless acid rain. Kael pulled his synthetic collar up and checked the encrypted datapad in his pocket. The transmission was genuine, and dangerous.</p>",
           views: 74,
+        },
+        {
+          title: "Chapter 2: The Ghost Protocol",
+          content:
+            "<p>Rain pounded against the reinforced glass of the transit capsule. Kael jacked the neural cable into the datapad, bypassing the surveillance firewalls of Cyberdyne Tower.</p><p>Lines of green code scrolled frantically across his optic visor. The file wasn't just corporate records—it was the deleted memories of an entire city block.</p>",
+          views: 58,
+        },
+        {
+          title: "Chapter 3: Alleyway Rendezvous",
+          content:
+            "<p>The back alley reeked of ozone and wet pavement. A hooded informant emerged from the shadows near a flickering neon noodle kiosk.</p><p>'You shouldn't have opened that packet,' the informant warned, tossing a small encrypted drive onto Kael's palm.</p>",
+          views: 47,
         },
       ],
     },
@@ -83,6 +107,18 @@ const SEED_DATA = {
             "<p>The ocean crashed violently against the jagged cliffs below. Inside the lighthouse lantern room, boxes of cedar wood preserved decades of handwriting untouched by the salty breeze.</p>",
           views: 62,
         },
+        {
+          title: "Chapter 2: The Tide Recedes",
+          content:
+            "<p>Morning brought a calming mist over the coastline. Clara walked along the shoreline, watching the gulls dive into the foamy waves.</p><p>In her coat pocket was letter number seven, written thirty years ago by an astronomer who promised to return when Halley's comet crossed the sky.</p>",
+          views: 51,
+        },
+        {
+          title: "Chapter 3: Beacon in the Dark",
+          content:
+            "<p>As night fell, the stormy squall rattled the lighthouse glass. Clara climbed the spiral iron staircase with a fresh gallon of kerosene.</p><p>She struck a long match, igniting the giant Fresnel lens. As the beam swept across the black waters, a distant horn signaled through the fog.</p>",
+          views: 44,
+        },
       ],
     },
     {
@@ -97,6 +133,18 @@ const SEED_DATA = {
           content:
             "<p>Tick. Tack. The rhythmic precision echoed throughout the cobblestone workshop. Mateo held the magnifying glass to his eye, carefully setting the ruby jewel inside the escapement wheel.</p>",
           views: 81,
+        },
+        {
+          title: "Chapter 2: Fractured Hours",
+          content:
+            "<p>The grand clock tower in the piazza chimed thirteen times at midnight. Mateo dropped his polishing cloth in disbelief. Across the workshop, every pendulum had ceased its swing simultaneously.</p><p>Outside, the carriage horses in the street were frozen mid-gallop. Time itself had paused for everyone—except him.</p>",
+          views: 63,
+        },
+        {
+          title: "Chapter 3: The Secret Escapement",
+          content:
+            "<p>Beneath the floorboards of the master's private study lay a locked chest wrapped in iron bands. Using a delicate skeleton key, Mateo unlocked the brass clasp.</p><p>Inside rested a sphere of interlocking golden gears, turning without any apparent spring or battery, humming with harmonic vibration.</p>",
+          views: 55,
         },
       ],
     },
@@ -188,7 +236,7 @@ const SEED_DATA = {
 };
 
 async function main() {
-  console.log("🌱 Starting smart seeding for PersonalM API database (At least 5 per category)...\n");
+  console.log("🌱 Starting smart seeding: 5 stories with exactly 3 chapters each (15 chapters total)...\n");
 
   // 1. Admin Account
   console.log("👤 [1/4] Checking Admin Account...");
@@ -212,8 +260,8 @@ async function main() {
     console.log(`   ✅ Account '${newAdmin.username}' created successfully (ID: ${newAdmin.id}).`);
   }
 
-  // 2. Stories & Chapters (5 Stories, 7 Chapters total)
-  console.log(`\n📖 [2/4] Checking Category: Stories & Chapters (${SEED_DATA.stories.length} stories)...`);
+  // 2. Stories & 3 Chapters each (5 Stories, 15 Chapters total)
+  console.log(`\n📖 [2/4] Checking Category: Stories & Chapters (${SEED_DATA.stories.length} stories x 3 chapters each)...`);
   for (const storyData of SEED_DATA.stories) {
     let targetStory = await prisma.story.findFirst({
       where: { title: storyData.title },
